@@ -1,26 +1,23 @@
 from django.core.management.base import BaseCommand, CommandError
-import requests
-
-URL_BASE_POKEMON = 'https://pokeapi.co/api/v2/'
+from poke_base_test.pokemon.api.request import pokemon_info
+from django.http import JsonResponse
+import json
 
 
 class Command(BaseCommand):
-    help = 'aaaaaaaa'
+    help = 'This command gives you information about a pokemon.'
     def add_arguments(self, parser):
         parser.add_argument('pokemonid', type=int, help='Id from a pokemon')
 
     def handle(self, *args, **options):
-        r = requests.get(URL_BASE_POKEMON+f'pokemon/{options["pokemonid"]}')
-        r2 = requests.get(URL_BASE_POKEMON+f'evolution-chain/{options["pokemonid"]}')
-        if r.ok:
-            print(r.json()['name'])
-            print(r.json()['weight'])
-            print(r.json()['height'])
-            print("##########STATS##########")
-            for stats in r.json()['stats']:
-                print(stats['stat']['name']+ ": " + str(stats['base_stat']))
-            print(r2.json())
-            
+        
+        pokemon = pokemon_info(self,options['pokemonid'])
+        print(pokemon)
+        # self.stderr.write(self.style.SUCCESS(pokemon))
+        
+        
+        
+        # return date_handler(self,pokemon)
         # print()
         # pokemon = pokepy.V2Client().get_pokemon(options['pokemonid'])
         # pokemon = client
@@ -30,4 +27,3 @@ class Command(BaseCommand):
         # self.stdout.write(self.style.SUCCESS(pokemon.weigth))
         # self.stdout.write(self.style.SUCCESS(pokemon.heigth))
         # self.stdout.write(self.style.SUCCESS(pokemon.id))
-    
