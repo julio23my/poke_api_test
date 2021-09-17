@@ -10,29 +10,6 @@ class NameTimeStampedModel(models.Model):
         class Meta:
             abstract = True
 
-
-
-
-
-# POKEMON BASE
-class Pokemon(NameTimeStampedModel):
-    
-    id = models.BigAutoField(primary_key=True, unique=True)
-    height = models.DecimalField('Height', max_digits=5, decimal_places=2)
-    Weight = models.DecimalField('Weight', max_digits=5, decimal_places=2)
-    evolution = models.ManyToManyField('self',blank=True)
-
-    class Meta:
-        verbose_name = ("pokemon")
-        verbose_name_plural = ("pokemons")
-
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse("pokemon_detail", kwargs={"pk": self.pk})
-
-
 # POKEMON MOVE
 class Move(NameTimeStampedModel):
     
@@ -109,4 +86,31 @@ class GameIndice(NameTimeStampedModel):
 
     def get_absolute_url(self):
         return reverse("game_indice_detail", kwargs={"pk": self.pk})
+
+
+
+
+
+# POKEMON BASE
+class Pokemon(NameTimeStampedModel):
+    
+    id = models.BigAutoField(primary_key=True, unique=True)
+    height = models.DecimalField('Height', max_digits=5, decimal_places=2)
+    Weight = models.DecimalField('Weight', max_digits=5, decimal_places=2)
+    evolution = models.ManyToManyField('self',blank=True)
+    moves = models.ManyToManyField(Move)
+    abilities = models.ManyToManyField(Ability)
+    forms = models.ManyToManyField(Form)
+    type = models.ManyToManyField(Type)
+    game_indices = models.ManyToManyField(GameIndice)
+
+    class Meta:
+        verbose_name = ("pokemon")
+        verbose_name_plural = ("pokemons")
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse("pokemon_detail", kwargs={"pk": self.pk})
 
