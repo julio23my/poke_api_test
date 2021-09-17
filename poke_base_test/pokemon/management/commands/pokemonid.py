@@ -1,6 +1,8 @@
 from django.core.management.base import BaseCommand, CommandError
 from poke_base_test.pokemon.api.request import pokemon_info
 from django.http import JsonResponse
+from django.core import serializers
+
 import json
 
 
@@ -12,18 +14,20 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         
         pokemon = pokemon_info(self,options['pokemonid'])
-        print(pokemon)
-        # self.stderr.write(self.style.SUCCESS(pokemon))
-        
-        
-        
-        # return date_handler(self,pokemon)
-        # print()
-        # pokemon = pokepy.V2Client().get_pokemon(options['pokemonid'])
-        # pokemon = client
-        # print(pokemon.id)
-        
-        # self.stdout.write(self.style.SUCCESS(pokemon.types))
-        # self.stdout.write(self.style.SUCCESS(pokemon.weigth))
-        # self.stdout.write(self.style.SUCCESS(pokemon.heigth))
-        # self.stdout.write(self.style.SUCCESS(pokemon.id))
+        self.stdout.write(self.style.WARNING('Information'))
+        for poke in pokemon:
+            if type(pokemon[poke]) == list and len(pokemon[poke]) > 0:
+                second_level = pokemon[poke]
+                self.stdout.write(self.style.WARNING(poke.capitalize().replace("_"," ")))
+                for i,data in enumerate(second_level):
+                    for key2,value in data.items():
+                        if key2 == 'alternative':
+                            if value ==True:
+                                self.stdout.write(self.style.ERROR(key2.capitalize()))
+                            else:
+                                continue
+                        else:
+                            self.stdout.write(self.style.SUCCESS(key2.capitalize().replace("_"," ")) + ": " +str(value))
+            else:
+                self.stdout.write(self.style.SUCCESS(poke.capitalize().replace("_"," "))+": "+ str(pokemon[poke]))
+            
