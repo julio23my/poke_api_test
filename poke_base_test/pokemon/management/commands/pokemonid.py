@@ -1,9 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from poke_base_test.pokemon.api.request import pokemon_info
-from django.http import JsonResponse
-from django.core import serializers
 
-import json
+
 
 
 class Command(BaseCommand):
