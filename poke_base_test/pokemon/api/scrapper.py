@@ -10,6 +10,7 @@ def get_all_data():
     if r.ok:
         for evolution_chain in range(1,max_count):
             try:
+                print(evolution_chain)
                 a = requests.get(URL_BASE_POKEMON+f'evolution-chain/{evolution_chain}')
                 dic_chain={}
                 dic_chain['first'] = []
@@ -32,6 +33,7 @@ def get_all_data():
                     else:
                         pass
                     a = consult_by_chain(dic_chain)
+                    set_evolutions = set_evolution(a)
                 else:
                     pass
             except error:
@@ -98,7 +100,11 @@ def consult_by_chain(dic_chain):
                     pass
         else:
             pass
-    try:
+    return dic_chain
+            
+
+def set_evolution(dic_chain):
+    if 'obj' in dic_chain['first']:
         obj,a = PokemonEvolution.objects.get_or_create(pokemon=dic_chain['first'][0]['obj'], is_evolution=False)
         for second in dic_chain['second']:
             obj2,b = PokemonEvolution.objects.get_or_create(pokemon=second['obj'], is_evolution=True, pre_evolution=obj)
@@ -107,10 +113,6 @@ def consult_by_chain(dic_chain):
             for third in dic_chain['third']:
                 obj3,c =PokemonEvolution.objects.get_or_create(pokemon=third['obj'], is_evolution=True, pre_evolution=obj2)
                 obj2.evolution.add(obj3)
-    except error:
-        pass
-
-        
         
             
 

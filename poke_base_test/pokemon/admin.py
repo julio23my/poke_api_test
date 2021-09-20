@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import Pokemon, Ability, GameIndice, Stat,PokemonStat,PokemonEvolution
 
 class PokemonAdmin(admin.ModelAdmin):
+    search_fields = ['name']
     pass
     
 
